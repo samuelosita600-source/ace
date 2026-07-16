@@ -59,3 +59,14 @@ The Identity Engine keeps ACE consistent by ensuring every response reflects the
 
 This makes ACE feel like one continuous companion instead of a different AI each time.
 
+---
+
+## Current Features
+
+Version 1.0.0
+
+- Loads identity.json
+- Loads personality.json
+- Loads traits.json
+- Provides identity information to other engines
+- Singleton instance available throughout ACE
