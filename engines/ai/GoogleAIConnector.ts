@@ -18,4 +18,3 @@ import {
                                     const googleAIConnector = new GoogleAIConnector();
 
                                     export default googleAIConnector;
-}

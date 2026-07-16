@@ -18,4 +18,3 @@ import {
                                     const openAIConnector = new OpenAIConnector();
 
                                     export default openAIConnector;
-}

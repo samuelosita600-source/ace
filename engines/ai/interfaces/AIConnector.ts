@@ -9,4 +9,3 @@ export interface AIRequest {
         export interface AIConnector {
           send(request: AIRequest): Promise<AIResponse>;
           }
-}

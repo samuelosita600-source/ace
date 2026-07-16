@@ -1,21 +1,35 @@
+import { anthropic } from "@/lib/providers";
+
 import {
-      AIConnector,
-        AIRequest,
-          AIResponse,
-          } from "./interfaces/AIConnector";
+  AIConnector,
+    AIRequest,
+      AIResponse,
+      } from "./interfaces/AIConnector";
 
-          export class AnthropicConnector implements AIConnector {
-            async send(request: AIRequest): Promise<AIResponse> {
-                console.log("Anthropic Request:");
-                    console.log(request.prompt);
+      export class AnthropicConnector implements AIConnector {
+        async send(request: AIRequest): Promise<AIResponse> {
+            const response = await anthropic.messages.create({
+                  model: "claude-sonnet-4-0",
+                        max_tokens: 1024,
+                              messages: [
+                                      {
+                                                role: "user",
+                                                          content: request.prompt,
+                                                                  },
+                                                                        ],
+                                                                            });
 
-                        return {
-                              text: "Anthropic response placeholder",
-                                  };
-                                    }
-                                    }
+                                                                                const text =
+                                                                                      response.content[0]?.type === "text"
+                                                                                              ? response.content[0].text
+                                                                                                      : "No response received.";
 
-                                    const anthropicConnector = new AnthropicConnector();
+                                                                                                          return {
+                                                                                                                text,
+                                                                                                                    };
+                                                                                                                      }
+                                                                                                                      }
 
-                                    export default anthropicConnector;
-}
+                                                                                                                      const anthropicConnector = new AnthropicConnector();
+
+                                                                                                                      export default anthropicConnector;

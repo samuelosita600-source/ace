@@ -3,41 +3,33 @@ import { AIProvider } from "./providers";
 
 import anthropicConnector from "./AnthropicConnector";
 import openAIConnector from "./OpenAIConnector";
+import googleAIConnector from "./GoogleAIConnector";
 
-export interface AIRequest {
-  prompt: string;
-  }
-
-  export interface AIResponse {
-    text: string;
-    }
+import {
+  AIRequest,
+    AIResponse,
+    } from "./interfaces/AIConnector";
 
     export class AIGateway {
       public async generate(request: AIRequest): Promise<AIResponse> {
           switch (AIConfig.defaultProvider) {
                 case AIProvider.Anthropic:
-                        return anthropicConnector.send({
-                                  prompt: request.prompt,
-                                          });
+                        return anthropicConnector.send(request);
 
-                                                case AIProvider.OpenAI:
-                                                        return openAIConnector.send({
-                                                                  prompt: request.prompt,
-                                                                          });
+                              case AIProvider.OpenAI:
+                                      return openAIConnector.send(request);
 
-                                                                                default:
-                                                                                        throw new Error(
-                                                                                                  `Unsupported AI provider: ${AIConfig.defaultProvider}`
-                                                                                                          );
-                                                                                                              }
-                                                                                                                }
-                                                                                                                }
+                                            case AIProvider.Google:
+                                                    return googleAIConnector.send(request);
 
-                                                                                                                const aiGateway = new AIGateway();
+                                                          default:
+                                                                  throw new Error(
+                                                                            `Unsupported AI provider: ${AIConfig.defaultProvider}`
+                                                                                    );
+                                                                                        }
+                                                                                          }
+                                                                                          }
 
-                                                                                                                export default aiGateway;
-                                                                                                               import googleAIConnector from "./GoogleAIConnector";
-                                                                                                               case AIProvider.Google:
-                                                                                                                  return googleAIConnector.send({
-                                                                                                                      prompt: request.prompt,
-                                                                                                                        });
+                                                                                          const aiGateway = new AIGateway();
+
+                                                                                          export default aiGateway;

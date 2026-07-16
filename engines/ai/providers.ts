@@ -6,4 +6,3 @@ export enum AIProvider {
             DeepSeek = "deepseek",
               Ollama = "ollama",
               }
-}

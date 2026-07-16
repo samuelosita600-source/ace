@@ -8,7 +8,7 @@ export const anthropic = new Anthropic({
   apiKey: AIConfig.anthropicApiKey,
   });
 
-  export const openai = new OpenAI({
+  export const openAI = new OpenAI({
     apiKey: AIConfig.openAIApiKey,
     });
 
