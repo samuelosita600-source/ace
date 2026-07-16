@@ -1,5 +1,17 @@
 # ACE Database Design
 
+Version: 1.0.0
+Status: Draft
+Last Updated: 2026-07-16
+Author: Samuel + Claude Code
+
+---
+
+This document defines the database structure used by ACE.
+
+...
+# ACE Database Design
+
 This document defines the database structure used by ACE.
 
 It serves as the single source of truth for the database.
