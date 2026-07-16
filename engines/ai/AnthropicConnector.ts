@@ -1,23 +1,21 @@
-export interface AnthropicRequest {
-      prompt: string;
-      }
+import {
+      AIConnector,
+        AIRequest,
+          AIResponse,
+          } from "./interfaces/AIConnector";
 
-      export interface AnthropicResponse {
-        text: string;
-        }
+          export class AnthropicConnector implements AIConnector {
+            async send(request: AIRequest): Promise<AIResponse> {
+                console.log("Anthropic Request:");
+                    console.log(request.prompt);
 
-        export class AnthropicConnector {
-          async send(request: AnthropicRequest): Promise<AnthropicResponse> {
-              console.log("Anthropic Request:");
-                  console.log(request.prompt);
+                        return {
+                              text: "Anthropic response placeholder",
+                                  };
+                                    }
+                                    }
 
-                      return {
-                            text: "Anthropic response placeholder",
-                                };
-                                  }
-                                  }
+                                    const anthropicConnector = new AnthropicConnector();
 
-                                  const anthropicConnector = new AnthropicConnector();
-
-                                  export default anthropicConnector;
+                                    export default anthropicConnector;
 }

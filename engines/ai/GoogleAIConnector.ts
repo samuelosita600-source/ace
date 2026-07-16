@@ -1,24 +1,21 @@
-export interface GoogleAIRequest {
-      prompt: string;
-      }
+import {
+      AIConnector,
+        AIRequest,
+          AIResponse,
+          } from "./interfaces/AIConnector";
 
-      export interface GoogleAIResponse {
-        text: string;
-        }
+          export class GoogleAIConnector implements AIConnector {
+            async send(request: AIRequest): Promise<AIResponse> {
+                console.log("Google AI Request:");
+                    console.log(request.prompt);
 
-        export class GoogleAIConnector {
-          async send(request: GoogleAIRequest): Promise<GoogleAIResponse> {
-              console.log("Google AI Request:");
-                  console.log(request.prompt);
+                        return {
+                              text: "Google AI response placeholder",
+                                  };
+                                    }
+                                    }
 
-                      return {
-                            text: "Google AI response placeholder",
-                                };
-                                  }
-                                  }
+                                    const googleAIConnector = new GoogleAIConnector();
 
-                                  const googleAIConnector = new GoogleAIConnector();
-
-                                  export default googleAIConnector;
-                                  export
+                                    export default googleAIConnector;
 }
