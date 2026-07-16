@@ -17,3 +17,6 @@ public async generatePrompt(userMessage: string): Promise<string> {
         return this.buildPrompt(userMessage);
         }
 }
+const promptOrchestrator = new PromptOrchestrator();
+
+export default promptOrchestrator;
