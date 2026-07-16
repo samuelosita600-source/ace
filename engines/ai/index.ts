@@ -6,3 +6,4 @@ export { default as googleAIConnector } from "./GoogleAIConnector";
 
 export * from "./providers";
 export * from "./interfaces/AIConnector";
+export { default as aiManager } from "./AIManager";
