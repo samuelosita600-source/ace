@@ -1,5 +1,9 @@
 export enum AIProvider {
-      Anthropic = "anthropic",
-        OpenAI = "openai",
-          Gemini = "gemini",
-          }
+    Anthropic = "anthropic",
+      OpenAI = "openai",
+        Google = "google",
+          Grok = "grok",
+            DeepSeek = "deepseek",
+              Ollama = "ollama",
+              }
+}

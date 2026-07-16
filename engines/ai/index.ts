@@ -19,6 +19,14 @@ export class AIGateway {
 
 const aiGateway = new AIGateway();
 
-export default aiGateway;
+export { default } from "./AIGateway";
 
-export { default as claudeConnector } from "./ClaudeConnector";
+export { default as anthropicConnector } from "./AnthropicConnector";
+
+export { default as openAIConnector } from "./OpenAIConnector";
+
+export { default } from "./AIGateway";
+
+export { default as anthropicConnector } from "./AnthropicConnector";
+export { default as openAIConnector } from "./OpenAIConnector";
+export { default as googleAIConnector } from "./GoogleAIConnector";
