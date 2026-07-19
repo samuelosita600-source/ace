@@ -1,5 +1,5 @@
 export interface MemoryRecord {
-      id: string;
-        content: string;
-          createdAt: Date;
-          }
+  id: string;
+  content: string;
+  createdAt: Date;
+}

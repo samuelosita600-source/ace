@@ -10,6 +10,7 @@ Author: Samuel + Claude Code
 This document defines the database structure used by ACE.
 
 ...
+
 # ACE Database Design
 
 This document defines the database structure used by ACE.

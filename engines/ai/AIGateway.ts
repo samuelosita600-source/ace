@@ -1,35 +1,17 @@
-import { AIConfig } from "@/config/ai";
-import { AIProvider } from "./providers";
+import { AIConfig } from "./config/AIConfig";
+import type { AIRequest } from "./interfaces/AIRequest";
+import type { AIResponse } from "./interfaces/AIResponse";
 
-import anthropicConnector from "./AnthropicConnector";
-import openAIConnector from "./OpenAIConnector";
-import googleAIConnector from "./GoogleAIConnector";
+export class AIGateway {
+  public async generate(request: AIRequest): Promise<AIResponse> {
+    return {
+      text: `Gateway handled: ${request.prompt}`,
+      provider: AIConfig.defaultProvider,
+      model: AIConfig.defaultModel,
+    };
+  }
+}
 
-import {
-  AIRequest,
-    AIResponse,
-    } from "./interfaces/AIConnector";
+const aiGateway = new AIGateway();
 
-    export class AIGateway {
-      public async generate(request: AIRequest): Promise<AIResponse> {
-          switch (AIConfig.defaultProvider) {
-                case AIProvider.Anthropic:
-                        return anthropicConnector.send(request);
-
-                              case AIProvider.OpenAI:
-                                      return openAIConnector.send(request);
-
-                                            case AIProvider.Google:
-                                                    return googleAIConnector.send(request);
-
-                                                          default:
-                                                                  throw new Error(
-                                                                            `Unsupported AI provider: ${AIConfig.defaultProvider}`
-                                                                                    );
-                                                                                        }
-                                                                                          }
-                                                                                          }
-
-                                                                                          const aiGateway = new AIGateway();
-
-                                                                                          export default aiGateway;
+export default aiGateway;

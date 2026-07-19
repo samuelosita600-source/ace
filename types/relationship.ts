@@ -1,5 +1,5 @@
 export interface RelationshipProfile {
-      id: string;
-        name: string;
-          relationship: string;
-          }
+  id: string;
+  name: string;
+  relationship: string;
+}

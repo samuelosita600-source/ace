@@ -1,9 +1,14 @@
 export { default } from "./AIGateway";
 
-export { default as anthropicConnector } from "./AnthropicConnector";
-export { default as openAIConnector } from "./OpenAIConnector";
-export { default as googleAIConnector } from "./GoogleAIConnector";
-
-export * from "./providers";
-export * from "./interfaces/AIConnector";
+export * from "./AIGateway";
+export * from "./config/AIConfig";
+export * from "./config/ModelConfig";
+export * from "./interfaces/AIProvider";
+export * from "./interfaces/AIRequest";
+export * from "./interfaces/AIResponse";
+export * from "./providers/OpenRouterProvider";
+export * from "./router/ModelRouter";
+export * from "./router/ProviderRegistry";
+export * from "./router/ProviderHealth";
+export * from "./router/ModelSelector";
 export { default as aiManager } from "./AIManager";

@@ -1,11 +1,11 @@
 export interface AIRequest {
-      prompt: string;
-      }
+  prompt: string;
+}
 
-      export interface AIResponse {
-        text: string;
-        }
+export interface AIResponse {
+  text: string;
+}
 
-        export interface AIConnector {
-          send(request: AIRequest): Promise<AIResponse>;
-          }
+export interface AIConnector {
+  send(request: AIRequest): Promise<AIResponse>;
+}

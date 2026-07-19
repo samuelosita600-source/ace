@@ -1,25 +1,25 @@
 export enum MemoryType {
-      Conversation = "conversation",
+  Conversation = "conversation",
 
-        Preference = "preference",
+  Preference = "preference",
 
-          Relationship = "relationship",
+  Relationship = "relationship",
 
-            Goal = "goal",
+  Goal = "goal",
 
-              Fact = "fact",
+  Fact = "fact",
 
-                Event = "event",
+  Event = "event",
 
-                  Reflection = "reflection",
-                  }
+  Reflection = "reflection",
+}
 
-                  export interface MemoryMetadata {
-                    importance: number;
+export interface MemoryMetadata {
+  importance: number;
 
-                      confidence: number;
+  confidence: number;
 
-                        source: string;
+  source: string;
 
-                          tags: string[];
-                          }
+  tags: string[];
+}

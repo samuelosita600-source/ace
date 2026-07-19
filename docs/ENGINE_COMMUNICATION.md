@@ -10,6 +10,7 @@ Author: Samuel + Claude Code
 This document defines the database structure used by ACE.
 
 ...
+
 # ACE Engine Communication
 
 This document defines how every engine communicates with the rest of the system.
