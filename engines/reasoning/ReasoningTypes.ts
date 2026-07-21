@@ -1,32 +1,39 @@
+import type { TaskResult } from "@/engines/task/TaskTypes";
+import type { WorkflowResult } from "@/engines/workflow/WorkflowTypes";
+
 export interface ReasoningContext {
-      userId: string;
-        message: string;
+  userId: string;
+  message: string;
 
-          conversationId?: string;
+  conversationId?: string;
 
-            memories?: unknown[];
+  memories?: unknown[];
 
-              architectureIntent?: string;
-              }
+  architectureIntent?: string;
 
-              export interface ReasoningAnalysis {
-                intent: string;
+  /** Enrichments produced by the task and workflow engines. */
+  task?: TaskResult;
+  workflow?: WorkflowResult;
+}
 
-                  confidence: number;
+export interface ReasoningAnalysis {
+  intent: string;
 
-                    sentiment?: string;
-                    }
+  confidence: number;
 
-                    export interface ReasoningPlan {
-                      strategy: string;
+  sentiment?: string;
+}
 
-                        steps: string[];
+export interface ReasoningPlan {
+  strategy: string;
 
-                          confidence: number;
-                          }
+  steps: string[];
 
-                          export interface ReasoningResult extends ReasoningContext {
-                            analysis: ReasoningAnalysis;
+  confidence: number;
+}
 
-                              plan: ReasoningPlan;
-                              }
+export interface ReasoningResult extends ReasoningContext {
+  analysis: ReasoningAnalysis;
+
+  plan: ReasoningPlan;
+}

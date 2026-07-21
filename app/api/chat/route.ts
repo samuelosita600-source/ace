@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
-import chatEngine from "@/engines/chat";
+import chatManager from "@/engines/chat";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const response = await chatEngine.sendMessage(body.message);
+    const response = await chatManager.sendMessage({
+      userId: body.userId ?? "anonymous",
+      message: body.message,
+      conversationId: body.conversationId,
+    });
 
     return NextResponse.json(response);
   } catch (error) {

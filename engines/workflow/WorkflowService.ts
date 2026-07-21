@@ -8,8 +8,10 @@ export class WorkflowService {
   }
 
   public execute(context: ReasoningContext): ReasoningContext {
-    context.workflow = this.createWorkflow(context.message);
-    return context;
+    return {
+      ...context,
+      workflow: this.createWorkflow(context.message),
+    };
   }
 }
 

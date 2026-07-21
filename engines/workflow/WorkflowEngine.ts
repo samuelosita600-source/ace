@@ -1,114 +1,89 @@
 import { ReasoningContext } from "@/engines/reasoning";
-import {
-  WorkflowResult,
-    WorkflowTask,
-    } from "./WorkflowTypes";
+import { WorkflowResult, WorkflowTask } from "./WorkflowTypes";
 
-    export class WorkflowEngine {
+export class WorkflowEngine {
+  public execute(context: ReasoningContext): ReasoningContext {
+    return {
+      ...context,
+      workflow: this.createWorkflow(context.message),
+    };
+  }
 
-      public execute(
-          context: ReasoningContext
-            ): ReasoningContext {
+  public createWorkflow(message: string): WorkflowResult {
+    const tasks = this.buildWorkflow(message);
 
-                context.workflow = this.createWorkflow(
-                      context.message
-                          );
+    const completed = tasks.filter((task) => task.completed).length;
 
-                              return context;
-                                }
+    const progress = tasks.length === 0 ? 0 : completed / tasks.length;
 
-                                  public createWorkflow(
-                                      message: string
-                                        ): WorkflowResult {
+    return {
+      workflowName: this.getWorkflowName(message),
+      tasks,
+      progress,
+      confidence: 0.95,
+    };
+  }
 
-                                            const tasks = this.buildWorkflow(message);
+  private getWorkflowName(message: string): string {
+    const text = message.toLowerCase();
 
-                                                const completed = tasks.filter(
-                                                      task => task.completed
-                                                          ).length;
+    if (
+      text.includes("ace") ||
+      text.includes("project") ||
+      text.includes("system")
+    ) {
+      return "Software Development";
+    }
 
-                                                              const progress =
-                                                                    tasks.length === 0
-                                                                            ? 0
-                                                                                    : completed / tasks.length;
+    if (text.includes("study") || text.includes("learn")) {
+      return "Learning";
+    }
 
-                                                                                        return {
-                                                                                              workflowName: this.getWorkflowName(message),
-                                                                                                    tasks,
-                                                                                                          progress,
-                                                                                                                confidence: 0.95,
-                                                                                                                    };
-                                                                                                                      }
+    return "General Workflow";
+  }
 
-                                                                                                                        private getWorkflowName(
-                                                                                                                            message: string
-                                                                                                                              ): string {
+  private buildWorkflow(message: string): WorkflowTask[] {
+    const text = message.toLowerCase();
 
-                                                                                                                                  const text = message.toLowerCase();
+    if (
+      text.includes("build") ||
+      text.includes("project") ||
+      text.includes("system")
+    ) {
+      return [
+        {
+          id: 1,
+          title: "Design",
+          completed: false,
+        },
+        {
+          id: 2,
+          title: "Development",
+          completed: false,
+        },
+        {
+          id: 3,
+          title: "Testing",
+          completed: false,
+        },
+        {
+          id: 4,
+          title: "Deployment",
+          completed: false,
+        },
+      ];
+    }
 
-                                                                                                                                      if (
-                                                                                                                                            text.includes("ace") ||
-                                                                                                                                                  text.includes("project") ||
-                                                                                                                                                        text.includes("system")
-                                                                                                                                                            ) {
-                                                                                                                                                                  return "Software Development";
-                                                                                                                                                                      }
+    return [
+      {
+        id: 1,
+        title: "Complete Request",
+        completed: false,
+      },
+    ];
+  }
+}
 
-                                                                                                                                                                          if (
-                                                                                                                                                                                text.includes("study") ||
-                                                                                                                                                                                      text.includes("learn")
-                                                                                                                                                                                          ) {
-                                                                                                                                                                                                return "Learning";
-                                                                                                                                                                                                    }
+const workflowEngine = new WorkflowEngine();
 
-                                                                                                                                                                                                        return "General Workflow";
-                                                                                                                                                                                                          }
-
-                                                                                                                                                                                                            private buildWorkflow(
-                                                                                                                                                                                                                message: string
-                                                                                                                                                                                                                  ): WorkflowTask[] {
-
-                                                                                                                                                                                                                      const text = message.toLowerCase();
-
-                                                                                                                                                                                                                          if (
-                                                                                                                                                                                                                                text.includes("build") ||
-                                                                                                                                                                                                                                      text.includes("project") ||
-                                                                                                                                                                                                                                            text.includes("system")
-                                                                                                                                                                                                                                                ) {
-                                                                                                                                                                                                                                                      return [
-                                                                                                                                                                                                                                                              {
-                                                                                                                                                                                                                                                                        id: 1,
-                                                                                                                                                                                                                                                                                  title: "Design",
-                                                                                                                                                                                                                                                                                            completed: false,
-                                                                                                                                                                                                                                                                                                    },
-                                                                                                                                                                                                                                                                                                            {
-                                                                                                                                                                                                                                                                                                                      id: 2,
-                                                                                                                                                                                                                                                                                                                                title: "Development",
-                                                                                                                                                                                                                                                                                                                                          completed: false,
-                                                                                                                                                                                                                                                                                                                                                  },
-                                                                                                                                                                                                                                                                                                                                                          {
-                                                                                                                                                                                                                                                                                                                                                                    id: 3,
-                                                                                                                                                                                                                                                                                                                                                                              title: "Testing",
-                                                                                                                                                                                                                                                                                                                                                                                        completed: false,
-                                                                                                                                                                                                                                                                                                                                                                                                },
-                                                                                                                                                                                                                                                                                                                                                                                                        {
-                                                                                                                                                                                                                                                                                                                                                                                                                  id: 4,
-                                                                                                                                                                                                                                                                                                                                                                                                                            title: "Deployment",
-                                                                                                                                                                                                                                                                                                                                                                                                                                      completed: false,
-                                                                                                                                                                                                                                                                                                                                                                                                                                              },
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    ];
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            return [
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                  {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                          id: 1,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  title: "Complete Request",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          completed: false,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                },
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ];
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      }
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      const workflowEngine = new WorkflowEngine();
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      export default workflowEngine;
+export default workflowEngine;

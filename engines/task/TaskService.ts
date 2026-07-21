@@ -8,8 +8,10 @@ export class TaskService {
   }
 
   public execute(context: ReasoningContext): ReasoningContext {
-    context.task = this.identify(context.message);
-    return context;
+    return {
+      ...context,
+      task: this.identify(context.message),
+    };
   }
 }
 

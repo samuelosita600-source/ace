@@ -1,76 +1,82 @@
-import { ReasoningContext } from "@/engines/reasoning";
-import {
-  TaskResult,
-    TaskType,
-    } from "./TaskTypes";
+import type { ReasoningContext } from "@/engines/reasoning";
+import { TaskResult, TaskType } from "./TaskTypes";
 
-    export class TaskEngine {
+export class TaskEngine {
+  public execute(context: ReasoningContext): ReasoningContext {
+    return {
+      ...context,
+      task: this.identify(context.message),
+    };
+  }
 
-      public execute(
-          context: ReasoningContext
-            ): ReasoningContext {
+  public identify(message: string): TaskResult {
+    const text = message.toLowerCase();
 
-                context.task = this.identify(
-                      context.message
-                          );
+    if (
+      this.containsAny(text, [
+        "daily",
+        "weekly",
+        "monthly",
+        "every ",
+        "recurring",
+        "remind",
+      ])
+    ) {
+      return {
+        task: TaskType.Recurring,
+        confidence: 0.95,
+        reason: "The request describes a repeating cadence or reminder.",
+      };
+    }
 
-                              return context;
-                                }
+    if (
+      this.containsAny(text, [
+        "project",
+        "build",
+        "create",
+        "develop",
+        "implement",
+        "system",
+      ])
+    ) {
+      return {
+        task: TaskType.Project,
+        confidence: 0.9,
+        reason:
+          "The request describes a deliverable with an implementation scope.",
+      };
+    }
 
-                                  public identify(
-                                      message: string
-                                        ): TaskResult {
+    if (
+      this.containsAny(text, [
+        "plan",
+        "steps",
+        "roadmap",
+        "strategy",
+        "migrate",
+        "workflow",
+      ])
+    ) {
+      return {
+        task: TaskType.MultiStep,
+        confidence: 0.85,
+        reason:
+          "The request requires coordinated steps rather than a single action.",
+      };
+    }
 
-                                            const text = message.toLowerCase();
+    return {
+      task: TaskType.OneTime,
+      confidence: 0.75,
+      reason: "The request can be handled as a single interaction.",
+    };
+  }
 
-                                                if (
-                                                      text.includes("build") ||
-                                                            text.includes("create")
-                                                                ) {
-                                                                      return {
-                                                                              type: TaskType.CREATE,
-                                                                                      confidence: 0.95,
-                                                                                            };
-                                                                                                }
+  private containsAny(text: string, terms: string[]): boolean {
+    return terms.some((term) => text.includes(term));
+  }
+}
 
-                                                                                                    if (
-                                                                                                          text.includes("fix") ||
-                                                                                                                text.includes("repair") ||
-                                                                                                                      text.includes("debug")
-                                                                                                                          ) {
-                                                                                                                                return {
-                                                                                                                                        type: TaskType.FIX,
-                                                                                                                                                confidence: 0.94,
-                                                                                                                                                      };
-                                                                                                                                                          }
+const taskEngine = new TaskEngine();
 
-                                                                                                                                                              if (
-                                                                                                                                                                    text.includes("explain") ||
-                                                                                                                                                                          text.includes("teach") ||
-                                                                                                                                                                                text.includes("learn")
-                                                                                                                                                                                    ) {
-                                                                                                                                                                                          return {
-                                                                                                                                                                                                  type: TaskType.LEARN,
-                                                                                                                                                                                                          confidence: 0.92,
-                                                                                                                                                                                                                };
-                                                                                                                                                                                                                    }
-
-                                                                                                                                                                                                                        if (
-                                                                                                                                                                                                                              text.includes("plan")
-                                                                                                                                                                                                                                  ) {
-                                                                                                                                                                                                                                        return {
-                                                                                                                                                                                                                                                type: TaskType.PLAN,
-                                                                                                                                                                                                                                                        confidence: 0.90,
-                                                                                                                                                                                                                                                              };
-                                                                                                                                                                                                                                                                  }
-
-                                                                                                                                                                                                                                                                      return {
-                                                                                                                                                                                                                                                                            type: TaskType.GENERAL,
-                                                                                                                                                                                                                                                                                  confidence: 0.80,
-                                                                                                                                                                                                                                                                                      };
-                                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                                        }
-
-                                                                                                                                                                                                                                                                                        const taskEngine = new TaskEngine();
-
-                                                                                                                                                                                                                                                                                        export default taskEngine;
+export default taskEngine;

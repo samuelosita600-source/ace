@@ -4,39 +4,27 @@ import { AIResponse } from "./interfaces/AIResponse";
 import modelRouter from "./router/ModelRouter";
 
 export class AIGateway {
+  /**
+   * Generate an AI response.
+   */
+  public async generate(request: AIRequest): Promise<AIResponse> {
+    return modelRouter.generate(request);
+  }
 
-    /**
-     * Generate an AI response.
-     */
-    public async generate(
-        request: AIRequest
-    ): Promise<AIResponse> {
+  /**
+   * Check if the AI system is ready.
+   */
+  public async isReady(): Promise<boolean> {
+    try {
+      await modelRouter.generate({
+        prompt: "health check",
+      });
 
-        return modelRouter.generate(request);
-
+      return true;
+    } catch {
+      return false;
     }
-
-    /**
-     * Check if the AI system is ready.
-     */
-    public async isReady(): Promise<boolean> {
-
-        try {
-
-            modelRouter.generate({
-                prompt: "health check"
-            });
-
-            return true;
-
-        } catch {
-
-            return false;
-
-        }
-
-    }
-
+  }
 }
 
 const aiGateway = new AIGateway();

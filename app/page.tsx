@@ -21,7 +21,7 @@ export default function Home() {
 
     const data = await res.json();
 
-    setResponse(data.message);
+    setResponse(data.response ?? data.message);
   }
 
   return (

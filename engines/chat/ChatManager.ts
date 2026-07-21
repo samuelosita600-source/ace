@@ -1,20 +1,12 @@
-import {
-  ChatRequest,
-  ChatResponse,
-} from "./ ChatTypes";
+import { ChatRequest, ChatResponse } from "./ChatTypes";
 
-import chatPipeline from "./ ChatPipeline";
+import chatPipeline from "./ChatPipeline";
 
 export class ChatManager {
-
-  public async handle(
-    request: ChatRequest
-  ): Promise<ChatResponse> {
-
+  /** Public chat boundary used by HTTP and UI adapters. */
+  public async sendMessage(request: ChatRequest): Promise<ChatResponse> {
     return chatPipeline.execute(request);
-
   }
-
 }
 
 const chatManager = new ChatManager();
