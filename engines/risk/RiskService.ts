@@ -8,8 +8,10 @@ export class RiskService {
   }
 
   public execute(context: ReasoningContext): ReasoningContext {
-    context.risk = this.assess(context.message);
-    return context;
+    return {
+      ...context,
+      risk: this.assess(context.message),
+    };
   }
 }
 

@@ -1,3 +1,9 @@
+import type { ExecutionResult } from "@/engines/execution/ExecutionTypes";
+import type { GoalResult } from "@/engines/goal/GoalTypes";
+import type { IntentResult } from "@/engines/intent/IntentTypes";
+import type { PlanningResult } from "@/engines/planning/PlanningTypes";
+import type { PriorityResult } from "@/engines/priority/PriorityTypes";
+import type { RiskResult } from "@/engines/risk/RiskTypes";
 import type { TaskResult } from "@/engines/task/TaskTypes";
 import type { WorkflowResult } from "@/engines/workflow/WorkflowTypes";
 
@@ -11,7 +17,13 @@ export interface ReasoningContext {
 
   architectureIntent?: string;
 
-  /** Enrichments produced by the task and workflow engines. */
+  /** Enrichments produced by orchestration engines. */
+  goal?: GoalResult;
+  intent?: IntentResult;
+  plan?: PlanningResult;
+  priority?: PriorityResult;
+  risk?: RiskResult;
+  execution?: ExecutionResult;
   task?: TaskResult;
   workflow?: WorkflowResult;
 }
@@ -35,5 +47,5 @@ export interface ReasoningPlan {
 export interface ReasoningResult extends ReasoningContext {
   analysis: ReasoningAnalysis;
 
-  plan: ReasoningPlan;
+  reasoningPlan: ReasoningPlan;
 }

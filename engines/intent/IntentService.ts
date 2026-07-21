@@ -10,8 +10,10 @@ export class IntentService {
   }
 
   public execute(context: ReasoningContext): ReasoningContext {
-    context.intent = this.identify(context.message);
-    return context;
+    return {
+      ...context,
+      intent: this.identify(context.message),
+    };
   }
 }
 

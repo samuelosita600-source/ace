@@ -1,5 +1,6 @@
 import type { ReasoningContext } from "@/engines/reasoning";
-import goalEngine, { type GoalResult } from "./GoalEngine";
+import goalEngine from "./GoalEngine";
+import type { GoalResult } from "./GoalTypes";
 
 export class GoalService {
   public identify(message: string): GoalResult {
@@ -7,8 +8,10 @@ export class GoalService {
   }
 
   public execute(context: ReasoningContext): ReasoningContext {
-    context.goal = this.identify(context.message);
-    return context;
+    return {
+      ...context,
+      goal: this.identify(context.message),
+    };
   }
 }
 

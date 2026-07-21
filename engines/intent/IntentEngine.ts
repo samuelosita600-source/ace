@@ -1,66 +1,99 @@
-import { ReasoningContext } from "@/engines/reasoning";
-import {
-  IntentResult,
-    IntentType,
-    } from "./IntentTypes";
+import type { ReasoningContext } from "@/engines/reasoning";
+import { IntentType, type IntentResult } from "./IntentTypes";
 
-    export class IntentEngine {
+export class IntentEngine {
+  public execute(context: ReasoningContext): ReasoningContext {
+    return {
+      ...context,
+      intent: this.identify(context.message),
+    };
+  }
 
-      public execute(
-          context: ReasoningContext
-            ): ReasoningContext {
+  public identify(message: string): IntentResult {
+    const text = message.toLowerCase();
 
-                context.intent = this.identify(
-                      context.message
-                          );
+    if (this.containsAny(text, ["hello", "hi", "hey"])) {
+      return {
+        type: IntentType.GREETING,
+        confidence: 0.9,
+        reason: "The message opens with a greeting.",
+      };
+    }
 
-                              return context;
-                                }
+    if (this.containsAny(text, ["bye", "goodbye", "see you"])) {
+      return {
+        type: IntentType.GOODBYE,
+        confidence: 0.9,
+        reason: "The message closes or exits the conversation.",
+      };
+    }
 
-                                  public identify(
-                                      message: string
-                                        ): IntentResult {
+    if (text.includes("?")) {
+      return {
+        type: IntentType.QUESTION,
+        confidence: 0.92,
+        reason: "The message asks for information or clarification.",
+      };
+    }
 
-                                            const text = message.toLowerCase();
+    if (
+      this.containsAny(text, ["fix", "debug", "build", "create", "develop"])
+    ) {
+      return {
+        type: IntentType.COMMAND,
+        confidence: 0.9,
+        reason:
+          "The message directs the system to perform implementation work.",
+      };
+    }
 
-                                                if (
-                                                      text.includes("build") ||
-                                                            text.includes("create") ||
-                                                                  text.includes("develop")
-                                                                      ) {
-                                                                            return {
-                                                                                    type: IntentType.CREATE,
-                                                                                            confidence: 0.95,
-                                                                                                  };
-                                                                                                      }
+    if (
+      this.containsAny(text, ["please", "can you", "could you", "would you"])
+    ) {
+      return {
+        type: IntentType.REQUEST,
+        confidence: 0.85,
+        reason: "The message asks the system to take an action.",
+      };
+    }
 
-                                                                                                          if (
-                                                                                                                text.includes("fix") ||
-                                                                                                                      text.includes("debug")
-                                                                                                                          ) {
-                                                                                                                                return {
-                                                                                                                                        type: IntentType.FIX,
-                                                                                                                                                confidence: 0.93,
-                                                                                                                                                      };
-                                                                                                                                                          }
+    if (
+      this.containsAny(text, [
+        "feel",
+        "feeling",
+        "happy",
+        "sad",
+        "angry",
+        "worried",
+      ])
+    ) {
+      return {
+        type: IntentType.EMOTION,
+        confidence: 0.82,
+        reason: "The message expresses an emotional state.",
+      };
+    }
 
-                                                                                                                                                              if (
-                                                                                                                                                                    text.includes("learn") ||
-                                                                                                                                                                          text.includes("teach")
-                                                                                                                                                                              ) {
-                                                                                                                                                                                    return {
-                                                                                                                                                                                            type: IntentType.LEARN,
-                                                                                                                                                                                                    confidence: 0.92,
-                                                                                                                                                                                                          };
-                                                                                                                                                                                                              }
+    if (text.trim().length > 0) {
+      return {
+        type: IntentType.STATEMENT,
+        confidence: 0.8,
+        reason: "The message is a declarative statement.",
+      };
+    }
 
-                                                                                                                                                                                                                  return {
-                                                                                                                                                                                                                        type: IntentType.GENERAL,
-                                                                                                                                                                                                                              confidence: 0.80,
-                                                                                                                                                                                                                                  };
-                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                    }
+    return {
+      type: IntentType.UNKNOWN,
+      confidence: 0.5,
+      reason: "The message does not contain enough signal to classify.",
+    };
+  }
 
-                                                                                                                                                                                                                                    const intentEngine = new IntentEngine();
+  private containsAny(text: string, terms: string[]): boolean {
+    return terms.some((term) => text.includes(term));
+  }
+}
 
-                                                                                                                                                                                                                                    export default intentEngine;
+const intentEngine = new IntentEngine();
+
+export default intentEngine;

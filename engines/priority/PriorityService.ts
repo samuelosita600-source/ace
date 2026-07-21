@@ -8,8 +8,10 @@ export class PriorityService {
   }
 
   public execute(context: ReasoningContext): ReasoningContext {
-    context.priority = this.determine(context.message);
-    return context;
+    return {
+      ...context,
+      priority: this.determine(context.message),
+    };
   }
 }
 

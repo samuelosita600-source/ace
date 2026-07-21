@@ -8,9 +8,10 @@ export class ExecutionEngine {
       throw new Error("ExecutionEngine requires a planning result.");
     }
 
-    context.execution = this.determineExecution(context.plan);
-
-    return context;
+    return {
+      ...context,
+      execution: this.determineExecution(context.plan),
+    };
   }
 
   public determineExecution(plan: PlanningResult): ExecutionResult {

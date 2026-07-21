@@ -1,61 +1,52 @@
-import { ReasoningContext } from "@/engines/reasoning";
-import {
-  RiskLevel,
-    RiskResult,
-    } from "./RiskTypes";
+import type { ReasoningContext } from "@/engines/reasoning";
+import { RiskLevel, type RiskResult } from "./RiskTypes";
 
-    export class RiskEngine {
+export class RiskEngine {
+  public execute(context: ReasoningContext): ReasoningContext {
+    return {
+      ...context,
+      risk: this.assess(context.message),
+    };
+  }
 
-      public execute(
-          context: ReasoningContext
-            ): ReasoningContext {
+  public assess(message: string): RiskResult {
+    const text = message.toLowerCase();
 
-                context.risk = this.assess(
-                      context.message
-                          );
+    if (
+      this.containsAny(text, [
+        "delete",
+        "drop database",
+        "production",
+        "shutdown",
+      ])
+    ) {
+      return {
+        level: RiskLevel.HIGH,
+        confidence: 0.98,
+        reason: "Potentially destructive action detected.",
+      };
+    }
 
-                              return context;
-                                }
+    if (this.containsAny(text, ["deploy", "replace", "overwrite"])) {
+      return {
+        level: RiskLevel.MEDIUM,
+        confidence: 0.92,
+        reason: "Operation may affect existing systems.",
+      };
+    }
 
-                                  public assess(
-                                      message: string
-                                        ): RiskResult {
+    return {
+      level: RiskLevel.LOW,
+      confidence: 0.88,
+      reason: "Low-risk request.",
+    };
+  }
 
-                                            const text = message.toLowerCase();
+  private containsAny(text: string, terms: string[]): boolean {
+    return terms.some((term) => text.includes(term));
+  }
+}
 
-                                                if (
-                                                      text.includes("delete") ||
-                                                            text.includes("drop database") ||
-                                                                  text.includes("production") ||
-                                                                        text.includes("shutdown")
-                                                                            ) {
-                                                                                  return {
-                                                                                          level: RiskLevel.HIGH,
-                                                                                                  confidence: 0.98,
-                                                                                                          reason: "Potentially destructive action detected.",
-                                                                                                                };
-                                                                                                                    }
+const riskEngine = new RiskEngine();
 
-                                                                                                                        if (
-                                                                                                                              text.includes("deploy") ||
-                                                                                                                                    text.includes("replace") ||
-                                                                                                                                          text.includes("overwrite")
-                                                                                                                                              ) {
-                                                                                                                                                    return {
-                                                                                                                                                            level: RiskLevel.MEDIUM,
-                                                                                                                                                                    confidence: 0.92,
-                                                                                                                                                                            reason: "Operation may affect existing systems.",
-                                                                                                                                                                                  };
-                                                                                                                                                                                      }
-
-                                                                                                                                                                                          return {
-                                                                                                                                                                                                level: RiskLevel.LOW,
-                                                                                                                                                                                                      confidence: 0.88,
-                                                                                                                                                                                                            reason: "Low-risk request.",
-                                                                                                                                                                                                                };
-                                                                                                                                                                                                                  }
-                                                                                                                                                                                                                  }
-
-                                                                                                                                                                                                                  const riskEngine = new RiskEngine();
-
-                                                                                                                                                                                                                  export default riskEngine;
+export default riskEngine;

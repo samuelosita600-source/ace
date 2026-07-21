@@ -1,42 +1,28 @@
-import {
-      ReasoningContext,
-        ReasoningResult,
-        } from "./ReasoningTypes";
+import { ReasoningContext, ReasoningResult } from "./ReasoningTypes";
 
-        import reasoningAnalyzer from "./ReasoningAnalyzer";
-        import reasoningPlanner from "./ReasoningPlanner";
+import reasoningAnalyzer from "./ReasoningAnalyzer";
+import reasoningPlanner from "./ReasoningPlanner";
 
-        export class ReasoningExecutor {
+export class ReasoningExecutor {
+  /**
+   * Execute the reasoning process.
+   */
+  public async execute(context: ReasoningContext): Promise<ReasoningResult> {
+    // Analyze the request
+    const analysis = await reasoningAnalyzer.analyze(context);
 
-          /**
-             * Execute the reasoning process.
-                */
-                  public async execute(
-                      context: ReasoningContext
-                        ): Promise<ReasoningResult> {
+    // Build a reasoning plan
+    const reasoningPlan = await reasoningPlanner.plan(context, analysis);
 
-                            // Analyze the request
-                                const analysis =
-                                      await reasoningAnalyzer.analyze(context);
+    // Return the reasoning result
+    return {
+      ...context,
+      analysis,
+      reasoningPlan,
+    } as ReasoningResult;
+  }
+}
 
-                                          // Build a reasoning plan
-                                              const plan =
-                                                    await reasoningPlanner.plan(
-                                                            context,
-                                                                    analysis
-                                                                          );
+const reasoningExecutor = new ReasoningExecutor();
 
-                                                                              // Return the reasoning result
-                                                                                  return {
-                                                                                        ...context,
-                                                                                              analysis,
-                                                                                                    plan,
-                                                                                                        } as ReasoningResult;
-
-                                                                                                          }
-
-                                                                                                          }
-
-                                                                                                          const reasoningExecutor = new ReasoningExecutor();
-
-                                                                                                          export default reasoningExecutor;
+export default reasoningExecutor;

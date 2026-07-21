@@ -8,8 +8,10 @@ export class PlanningService {
   }
 
   public execute(context: ReasoningContext): ReasoningContext {
-    context.plan = this.createPlan(context.message);
-    return context;
+    return {
+      ...context,
+      plan: this.createPlan(context.message),
+    };
   }
 }
 
