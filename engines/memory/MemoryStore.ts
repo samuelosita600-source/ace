@@ -1,29 +1,67 @@
-import { MemoryRecord } from "@/types";
+import { MemoryRecord } from "./MemoryTypes";
 
 export class MemoryStore {
-  public async create(memory: MemoryRecord): Promise<void> {
-    console.log("Creating memory:", memory);
-  }
 
-  public async update(memory: MemoryRecord): Promise<void> {
-    console.log("Updating memory:", memory);
-  }
+    private readonly memories = new Map<string, MemoryRecord>();
 
-  public async delete(id: string): Promise<void> {
-    console.log("Deleting memory:", id);
-  }
+        /**
+             * Create a new memory.
+                  */
+                      public async create(memory: MemoryRecord): Promise<void> {
+                              this.memories.set(memory.id, memory);
+                                  }
 
-  public async findById(id: string): Promise<MemoryRecord | null> {
-    console.log("Finding memory:", id);
+                                      /**
+                                           * Update an existing memory.
+                                                */
+                                                    public async update(memory: MemoryRecord): Promise<void> {
+                                                            this.memories.set(memory.id, memory);
+                                                                }
 
-    return null;
-  }
+                                                                    /**
+                                                                         * Delete a memory.
+                                                                              */
+                                                                                  public async delete(id: string): Promise<void> {
+                                                                                          this.memories.delete(id);
+                                                                                              }
 
-  public async findAll(): Promise<MemoryRecord[]> {
-    return [];
-  }
-}
+                                                                                                  /**
+                                                                                                       * Find a memory by ID.
+                                                                                                            */
+                                                                                                                public async findById(
+                                                                                                                        id: string
+                                                                                                                            ): Promise<MemoryRecord | null> {
 
-const memoryStore = new MemoryStore();
+                                                                                                                                    return this.memories.get(id) ?? null;
+                                                                                                                                        }
 
-export default memoryStore;
+                                                                                                                                            /**
+                                                                                                                                                 * Return all memories.
+                                                                                                                                                      */
+                                                                                                                                                          public async findAll(): Promise<MemoryRecord[]> {
+                                                                                                                                                                  return Array.from(this.memories.values());
+                                                                                                                                                                      }
+
+                                                                                                                                                                          /**
+                                                                                                                                                                               * Return all memories belonging to a user.
+                                                                                                                                                                                    */
+                                                                                                                                                                                        public async findByUser(
+                                                                                                                                                                                                userId: string
+                                                                                                                                                                                                    ): Promise<MemoryRecord[]> {
+
+                                                                                                                                                                                                            return Array.from(this.memories.values()).filter(
+                                                                                                                                                                                                                        memory => memory.userId === userId
+                                                                                                                                                                                                                                );
+                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                        /**
+                                                                                                                                                                                                                                             * Remove every stored memory.
+                                                                                                                                                                                                                                                  */
+                                                                                                                                                                                                                                                      public async clear(): Promise<void> {
+                                                                                                                                                                                                                                                              this.memories.clear();
+                                                                                                                                                                                                                                                                  }
+                                                                                                                                                                                                                                                                  }
+
+                                                                                                                                                                                                                                                                  const memoryStore = new MemoryStore();
+
+                                                                                                                                                                                                                                                                  export default memoryStore;

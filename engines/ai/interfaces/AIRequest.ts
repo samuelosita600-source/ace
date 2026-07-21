@@ -1,5 +1,11 @@
 export interface AIRequest {
-  prompt: string;
-  model?: string;
-  provider?: string;
+    prompt: string;
+
+    systemPrompt?: string;
+
+    model?: string;
+
+    temperature?: number;
+
+    maxTokens?: number;
 }

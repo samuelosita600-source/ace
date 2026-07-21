@@ -1,30 +1,19 @@
-export enum EmotionState {
-  Neutral = "neutral",
-  Happy = "happy",
-  Excited = "excited",
-  Curious = "curious",
-  Confused = "confused",
-  Frustrated = "frustrated",
-  Sad = "sad",
-  Angry = "angry",
-}
+import { EmotionState } from "./EmotionTypes";
 
-export interface EmotionAnalysis {
-  state: EmotionState;
-  confidence: number;
-}
+import emotionDetector from "./EmotionDetector";
 
 export class EmotionEngine {
-  public analyze(text: string): EmotionAnalysis {
-    console.log(`Analyzing emotion: ${text}`);
 
-    return {
-      state: EmotionState.Neutral,
-      confidence: 1,
-    };
-  }
-}
+  public async analyze(
+      message: string
+        ): Promise<EmotionState> {
 
-const emotionEngine = new EmotionEngine();
+            return emotionDetector.detect(message);
 
-export default emotionEngine;
+              }
+
+              }
+
+              const emotionEngine = new EmotionEngine();
+
+              export default emotionEngine;

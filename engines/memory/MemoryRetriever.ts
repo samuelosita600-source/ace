@@ -1,25 +1,76 @@
-import { MemoryRecord } from "@/types";
+import { MemoryRecord } from "./MemoryTypes";
+import memoryStore from "./MemoryStore";
 
 export class MemoryRetriever {
-  public async search(query: string): Promise<MemoryRecord[]> {
-    console.log(`Searching memories for: ${query}`);
 
-    return [];
-  }
+    /**
+         * Search memories by title, content, or tags.
+              */
+                  public async search(
+                          query: string
+                              ): Promise<MemoryRecord[]> {
 
-  public async recent(limit: number = 10): Promise<MemoryRecord[]> {
-    console.log(`Getting ${limit} recent memories`);
+                                      const memories = await memoryStore.findAll();
 
-    return [];
-  }
+                                              const search = query.toLowerCase();
 
-  public async important(limit: number = 10): Promise<MemoryRecord[]> {
-    console.log(`Getting ${limit} important memories`);
+                                                      return memories.filter(memory =>
+                                                                  memory.title.toLowerCase().includes(search) ||
+                                                                              memory.content.toLowerCase().includes(search) ||
+                                                                                          memory.metadata.tags.some(tag =>
+                                                                                                          tag.toLowerCase().includes(search)
+                                                                                                                      )
+                                                                                                                              );
+                                                                                                                                  }
 
-    return [];
-  }
-}
+                                                                                                                                      /**
+                                                                                                                                           * Get the most recently accessed memories.
+                                                                                                                                                */
+                                                                                                                                                    public async recent(
+                                                                                                                                                            limit: number = 10
+                                                                                                                                                                ): Promise<MemoryRecord[]> {
 
-const memoryRetriever = new MemoryRetriever();
+                                                                                                                                                                        const memories = await memoryStore.findAll();
 
-export default memoryRetriever;
+                                                                                                                                                                                return memories
+                                                                                                                                                                                            .sort(
+                                                                                                                                                                                                            (a, b) =>
+                                                                                                                                                                                                                                b.metadata.lastAccessedAt.getTime() -
+                                                                                                                                                                                                                                                    a.metadata.lastAccessedAt.getTime()
+                                                                                                                                                                                                                                                                )
+                                                                                                                                                                                                                                                                            .slice(0, limit);
+                                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                                    /**
+                                                                                                                                                                                                                                                                                         * Get the most important memories.
+                                                                                                                                                                                                                                                                                              */
+                                                                                                                                                                                                                                                                                                  public async important(
+                                                                                                                                                                                                                                                                                                          limit: number = 10
+                                                                                                                                                                                                                                                                                                              ): Promise<MemoryRecord[]> {
+
+                                                                                                                                                                                                                                                                                                                      const memories = await memoryStore.findAll();
+
+                                                                                                                                                                                                                                                                                                                              return memories
+                                                                                                                                                                                                                                                                                                                                          .sort(
+                                                                                                                                                                                                                                                                                                                                                          (a, b) =>
+                                                                                                                                                                                                                                                                                                                                                                              b.metadata.importance -
+                                                                                                                                                                                                                                                                                                                                                                                                  a.metadata.importance
+                                                                                                                                                                                                                                                                                                                                                                                                              )
+                                                                                                                                                                                                                                                                                                                                                                                                                          .slice(0, limit);
+                                                                                                                                                                                                                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                  /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                       * Get memories for a specific user.
+                                                                                                                                                                                                                                                                                                                                                                                                                                            */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                public async byUser(
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        userId: string
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            ): Promise<MemoryRecord[]> {
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    return memoryStore.findByUser(userId);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        const memoryRetriever = new MemoryRetriever();
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        export default memoryRetriever;

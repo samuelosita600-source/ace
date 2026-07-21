@@ -1,13 +1,47 @@
 export const AIConfig = {
-  openRouter: {
-    apiKey: process.env.OPENROUTER_API_KEY ?? "",
+      openRouter: {
+              /**
+                       * OpenRouter API Key
+                                */
+                                        apiKey: process.env.OPENROUTER_API_KEY ?? "",
 
-    baseUrl: "https://openrouter.ai/api/v1",
+                                                /**
+                                                         * OpenRouter Base URL
+                                                                  */
+                                                                          baseUrl: "https://openrouter.ai/api/v1",
 
-    defaultModel: "deepseek/deepseek-chat-v3-0324:free",
+                                                                                  /**
+                                                                                           * Default model used by ACE.
+                                                                                                    */
+                                                                                                            defaultModel: "deepseek/deepseek-chat-v3-0324:free",
 
-    timeout: 60000,
-  },
-};
+                                                                                                                    /**
+                                                                                                                             * Request timeout (milliseconds)
+                                                                                                                                      */
+                                                                                                                                              timeout: 60000,
+                                                                                                                                                  },
 
-export default AIConfig;
+                                                                                                                                                      /**
+                                                                                                                                                           * Retry failed requests.
+                                                                                                                                                                */
+                                                                                                                                                                    retryAttempts: 3,
+
+                                                                                                                                                                        /**
+                                                                                                                                                                             * Enable request logging.
+                                                                                                                                                                                  */
+                                                                                                                                                                                      enableLogging: true,
+
+                                                                                                                                                                                          /**
+                                                                                                                                                                                               * Automatically switch providers if one fails.
+                                                                                                                                                                                                    * (Will become useful when Claude, Gemini, GPT, Kimi, etc. are added.)
+                                                                                                                                                                                                         */
+                                                                                                                                                                                                             autoFailover: true,
+
+                                                                                                                                                                                                                 /**
+                                                                                                                                                                                                                      * Maximum concurrent AI requests.
+                                                                                                                                                                                                                           */
+                                                                                                                                                                                                                               maxConcurrentRequests: 5,
+                                                                                                                                                                                                                               };
+
+                                                                                                                                                                                                                               export default AIConfig;
+                                                                                                                                                                                                                 

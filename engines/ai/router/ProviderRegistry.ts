@@ -1,73 +1,48 @@
 import { AIProvider } from "../interfaces/AIProvider";
-import { AIRequest } from "../interfaces/AIRequest";
-import { AIResponse } from "../interfaces/AIResponse";
-import AIConfig from "../config/AIConfig";
+import openRouterProvider from "../providers/OpenRouterProvider";
 
-export class OpenRouterProvider implements AIProvider {
-  public readonly name = "OpenRouter";
+export class ProviderRegistry {
+    private readonly providers: AIProvider[] = [
+            openRouterProvider,
+                ];
 
-  public readonly priority = 1;
+                    /**
+                         * Returns all registered AI providers.
+                              */
+                                  public getProviders(): AIProvider[] {
+                                          return this.providers;
+                                              }
 
-  public async isAvailable(): Promise<boolean> {
-    return AIConfig.openRouter.apiKey.length > 0;
-  }
+                                                  /**
+                                                       * Returns the highest-priority available provider.
+                                                            */
+                                                                public async getPrimaryProvider(): Promise<AIProvider> {
+                                                                        const sortedProviders = [...this.providers].sort(
+                                                                                    (a, b) => a.priority - b.priority
+                                                                                            );
 
-  public async generate(request: AIRequest): Promise<AIResponse> {
-    const response = await fetch(
-      `${AIConfig.openRouter.baseUrl}/chat/completions`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${AIConfig.openRouter.apiKey}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://ace.ai",
-          "X-Title": "ACE AI",
-        },
-        body: JSON.stringify({
-          model: request.model ?? AIConfig.openRouter.defaultModel,
+                                                                                                    for (const provider of sortedProviders) {
+                                                                                                                try {
+                                                                                                                                if (await provider.isAvailable()) {
+                                                                                                                                                    return provider;
+                                                                                                                                                                    }
+                                                                                                                                                                                } catch {
+                                                                                                                                                                                                // Ignore failed providers and continue.
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                                    }
 
-          messages: [
-            {
-              role: "system",
-              content: request.systemPrompt ?? "",
-            },
-            {
-              role: "user",
-              content: request.prompt,
-            },
-          ],
+                                                                                                                                                                                                                            throw new Error("No AI providers are currently available.");
+                                                                                                                                                                                                                                }
 
-          temperature: request.temperature ?? 0.7,
+                                                                                                                                                                                                                                    /**
+                                                                                                                                                                                                                                         * Register a new provider.
+                                                                                                                                                                                                                                              * (Useful later when adding Gemini, Claude, Kimi, Grok, etc.)
+                                                                                                                                                                                                                                                   */
+                                                                                                                                                                                                                                                       public register(provider: AIProvider): void {
+                                                                                                                                                                                                                                                               this.providers.push(provider);
+                                                                                                                                                                                                                                                                   }
+                                                                                                                                                                                                                                                                   }
 
-          max_tokens: request.maxTokens ?? 2048,
-        }),
-      },
-    );
+                                                                                                                                                                                                                                                                   const providerRegistry = new ProviderRegistry();
 
-    if (!response.ok) {
-      throw new Error(`OpenRouter Error: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    return {
-      text: data.choices[0].message.content,
-
-      provider: this.name,
-
-      model: data.model,
-
-      promptTokens: data.usage?.prompt_tokens,
-
-      completionTokens: data.usage?.completion_tokens,
-
-      totalTokens: data.usage?.total_tokens,
-
-      finishReason: data.choices[0].finish_reason,
-    };
-  }
-}
-
-const openRouterProvider = new OpenRouterProvider();
-
-export default openRouterProvider;
+                                                                                                                                                                                                                                                                   export default providerRegistry;

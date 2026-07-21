@@ -1,31 +1,85 @@
-import { MemoryRecord } from "@/types";
+import { MemoryRecord } from "./MemoryTypes";
 
 export class MemoryScorer {
-  public score(memory: MemoryRecord): number {
-    let score = 50;
 
-    const content = memory.content.toLowerCase();
+    /**
+         * Calculate a relevance score for a memory.
+              */
+                  public score(
+                          memory: MemoryRecord,
+                                  query?: string
+                                      ): number {
 
-    if (content.includes("goal")) {
-      score += 20;
-    }
+                                              let score = 0;
 
-    if (content.includes("important")) {
-      score += 25;
-    }
+                                                      // Importance
+                                                              score += memory.metadata.importance * 5;
 
-    if (content.includes("family")) {
-      score += 15;
-    }
+                                                                      // Confidence
+                                                                              score += memory.metadata.confidence * 3;
 
-    if (content.includes("friend")) {
-      score += 10;
-    }
+                                                                                      // Access frequency
+                                                                                              score += memory.metadata.accessCount;
 
-    return Math.min(score, 100);
-  }
-}
+                                                                                                      // Recent memories are more valuable
+                                                                                                              const age =
+                                                                                                                          Date.now() -
+                                                                                                                                      memory.metadata.updatedAt.getTime();
 
-const memoryScorer = new MemoryScorer();
+                                                                                                                                              const days =
+                                                                                                                                                          age / (1000 * 60 * 60 * 24);
 
-export default memoryScorer;
+                                                                                                                                                                  if (days < 1) {
+
+                                                                                                                                                                              score += 25;
+
+                                                                                                                                                                                      } else if (days < 7) {
+
+                                                                                                                                                                                                  score += 15;
+
+                                                                                                                                                                                                          } else if (days < 30) {
+
+                                                                                                                                                                                                                      score += 5;
+
+                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                      // Query matching
+                                                                                                                                                                                                                                              if (query) {
+
+                                                                                                                                                                                                                                                          const search = query.toLowerCase();
+
+                                                                                                                                                                                                                                                                      if (
+                                                                                                                                                                                                                                                                                      memory.title
+                                                                                                                                                                                                                                                                                                          .toLowerCase()
+                                                                                                                                                                                                                                                                                                                              .includes(search)
+                                                                                                                                                                                                                                                                                                                                          ) {
+                                                                                                                                                                                                                                                                                                                                                          score += 50;
+                                                                                                                                                                                                                                                                                                                                                                      }
+
+                                                                                                                                                                                                                                                                                                                                                                                  if (
+                                                                                                                                                                                                                                                                                                                                                                                                  memory.content
+                                                                                                                                                                                                                                                                                                                                                                                                                      .toLowerCase()
+                                                                                                                                                                                                                                                                                                                                                                                                                                          .includes(search)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                      ) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                      score += 30;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              if (
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              memory.metadata.tags.some(tag =>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  tag.toLowerCase().includes(search)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  )
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              score += 20;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          return score;
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              const memoryScorer = new MemoryScorer();
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              export default memoryScorer;

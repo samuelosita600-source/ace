@@ -1,39 +1,123 @@
-import { MemoryRecord } from "@/types";
+import { MemoryRecord } from "./MemoryTypes";
 
 import memoryStore from "./MemoryStore";
 import memoryRetriever from "./MemoryRetriever";
-import memoryIndexer from "./MemoryIndexer";
+import memoryRanking from "./MemoryRanking";
 import memoryScorer from "./MemoryScorer";
-import memoryLifecycle from "./MemoryLifecycle";
+import memoryConsolidation from "./MemoryConsolidation";
+import memorySummarizer from "./MemorySummarizer";
 
 export class MemoryEngine {
-  public async save(memory: MemoryRecord): Promise<void> {
-    if (!memoryLifecycle.shouldStore(memory)) {
-      return;
-    }
 
-    const score = memoryScorer.score(memory);
+    /**
+         * Save a memory.
+              */
+                  public async save(
+                          memory: MemoryRecord
+                              ): Promise<void> {
 
-    console.log(`Memory score: ${score}`);
+                                      const score = memoryScorer.score(memory);
 
-    await memoryStore.create(memory);
+                                              console.log(`[MemoryEngine] Score: ${score}`);
 
-    await memoryIndexer.index(memory);
-  }
+                                                      const existing = await memoryStore.findById(memory.id);
 
-  public async search(query: string): Promise<MemoryRecord[]> {
-    return memoryRetriever.search(query);
-  }
+                                                              if (existing) {
 
-  public async recent(limit: number = 10): Promise<MemoryRecord[]> {
-    return memoryRetriever.recent(limit);
-  }
+                                                                          await memoryStore.update(memory);
 
-  public async important(limit: number = 10): Promise<MemoryRecord[]> {
-    return memoryRetriever.important(limit);
-  }
-}
+                                                                                  } else {
 
-const memoryEngine = new MemoryEngine();
+                                                                                              await memoryStore.create(memory);
 
-export default memoryEngine;
+                                                                                                      }
+
+                                                                                                          }
+
+                                                                                                              /**
+                                                                                                                   * Search memories.
+                                                                                                                        */
+                                                                                                                            public async search(
+                                                                                                                                    query: string,
+                                                                                                                                            limit: number = 10
+                                                                                                                                                ): Promise<MemoryRecord[]> {
+
+                                                                                                                                                        const memories =
+                                                                                                                                                                    await memoryRetriever.search(query);
+
+                                                                                                                                                                            return memoryRanking.top(
+                                                                                                                                                                                        memories,
+                                                                                                                                                                                                    query,
+                                                                                                                                                                                                                limit
+                                                                                                                                                                                                                        );
+
+                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                /**
+                                                                                                                                                                                                                                     * Get recent memories.
+                                                                                                                                                                                                                                          */
+                                                                                                                                                                                                                                              public async recent(
+                                                                                                                                                                                                                                                      limit: number = 10
+                                                                                                                                                                                                                                                          ): Promise<MemoryRecord[]> {
+
+                                                                                                                                                                                                                                                                  return memoryRetriever.recent(limit);
+
+                                                                                                                                                                                                                                                                      }
+
+                                                                                                                                                                                                                                                                          /**
+                                                                                                                                                                                                                                                                               * Get important memories.
+                                                                                                                                                                                                                                                                                    */
+                                                                                                                                                                                                                                                                                        public async important(
+                                                                                                                                                                                                                                                                                                limit: number = 10
+                                                                                                                                                                                                                                                                                                    ): Promise<MemoryRecord[]> {
+
+                                                                                                                                                                                                                                                                                                            return memoryRetriever.important(limit);
+
+                                                                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                                                                    /**
+                                                                                                                                                                                                                                                                                                                         * Consolidate memories.
+                                                                                                                                                                                                                                                                                                                              */
+                                                                                                                                                                                                                                                                                                                                  public async consolidate(): Promise<void> {
+
+                                                                                                                                                                                                                                                                                                                                          await memoryConsolidation.consolidateAll();
+
+                                                                                                                                                                                                                                                                                                                                              }
+
+                                                                                                                                                                                                                                                                                                                                                  /**
+                                                                                                                                                                                                                                                                                                                                                       * Summarize all memories.
+                                                                                                                                                                                                                                                                                                                                                            */
+                                                                                                                                                                                                                                                                                                                                                                public async summarize() {
+
+                                                                                                                                                                                                                                                                                                                                                                        const memories =
+                                                                                                                                                                                                                                                                                                                                                                                    await memoryStore.findAll();
+
+                                                                                                                                                                                                                                                                                                                                                                                            return memorySummarizer.summarize(memories);
+
+                                                                                                                                                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                                                                                                                                                    /**
+                                                                                                                                                                                                                                                                                                                                                                                                         * Delete a memory.
+                                                                                                                                                                                                                                                                                                                                                                                                              */
+                                                                                                                                                                                                                                                                                                                                                                                                                  public async delete(
+                                                                                                                                                                                                                                                                                                                                                                                                                          id: string
+                                                                                                                                                                                                                                                                                                                                                                                                                              ): Promise<void> {
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                      await memoryStore.delete(id);
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                          }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                              /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                   * Get every memory.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            public async getAll(): Promise<MemoryRecord[]> {
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    return memoryStore.findAll();
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        const memoryEngine = new MemoryEngine();
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        export default memoryEngine;

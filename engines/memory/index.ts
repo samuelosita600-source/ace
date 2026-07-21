@@ -1,10 +1,11 @@
-export { default } from "./MemoryService";
+export { default } from "./MemoryEngine";
 
-export * from "./MemoryService";
+export * from "./MemoryEngine";
+
 export * from "./MemoryTypes";
 export * from "./MemoryStore";
 export * from "./MemoryRetriever";
-export * from "./MemoryIndexer";
 export * from "./MemoryScorer";
-export * from "./MemoryLifecycle";
-export * from "./MemoryEngine";
+export * from "./MemoryRanking";
+export * from "./MemoryConsolidation";
+export * from "./MemorySummarizer";
