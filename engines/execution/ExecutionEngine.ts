@@ -1,6 +1,6 @@
-import { ReasoningContext } from "@/engines/reasoning";
-import { PlanningResult } from "@/engines/planning";
-import { ExecutionResult } from "./ExecutionTypes";
+import type { ReasoningContext } from "@/engines/reasoning";
+import type { PlanningResult } from "@/engines/planning";
+import type { ExecutionResult } from "./ExecutionTypes";
 
 export class ExecutionEngine {
   public execute(context: ReasoningContext): ReasoningContext {

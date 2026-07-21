@@ -1,4 +1,5 @@
 import type { ExecutionResult } from "@/engines/execution/ExecutionTypes";
+import type { EmotionState } from "@/engines/emotion/EmotionTypes";
 import type { GoalResult } from "@/engines/goal/GoalTypes";
 import type { IntentResult } from "@/engines/intent/IntentTypes";
 import type { PlanningResult } from "@/engines/planning/PlanningTypes";
@@ -24,6 +25,7 @@ export interface ReasoningContext {
   priority?: PriorityResult;
   risk?: RiskResult;
   execution?: ExecutionResult;
+  emotion?: EmotionState;
   task?: TaskResult;
   workflow?: WorkflowResult;
 }

@@ -1,7 +1,4 @@
-import {
-          ReasoningAnalysis,
-            ReasoningContext,
-            } from "./ReasoningTypes";
+import type { ReasoningAnalysis, ReasoningContext } from "./ReasoningTypes";
 
             export class ReasoningAnalyzer {
 
@@ -9,31 +6,11 @@ import {
                   context: ReasoningContext
                     ): Promise<ReasoningAnalysis> {
 
-                        const message = context.message.toLowerCase();
-
-                            let sentiment = "neutral";
-
-                                if (
-                                      message.includes("happy") ||
-                                            message.includes("great") ||
-                                                  message.includes("good")
-                                                      ) {
-                                                            sentiment = "positive";
-                                                                }
-
-                                                                    if (
-                                                                          message.includes("sad") ||
-                                                                                message.includes("angry") ||
-                                                                                      message.includes("bad")
-                                                                                          ) {
-                                                                                                sentiment = "negative";
-                                                                                                    }
-
-                                                                                                        return {
-                                                                                                              intent: "general",
-                                                                                                                    confidence: 0.95,
-                                                                                                                          sentiment,
-                                                                                                                              };
+                        return {
+                          intent: context.intent?.type ?? "UNKNOWN",
+                          confidence: context.intent?.confidence ?? 0.5,
+                          sentiment: context.emotion?.primary ?? "neutral",
+                        };
 
                                                                                                                                 }
 

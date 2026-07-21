@@ -8,17 +8,17 @@ export class PromptBuilder {
   public build(input: BrainInput): string {
     const { message, memories = [] } = input.context;
 
-    const { goals = [], emotions = [] } =
-      input.context as BrainInput["context"] & {
-        goals?: unknown[];
-        emotions?: unknown[];
-      };
+    const { goal, intent, priority, risk, plan, execution, emotion } =
+      input.context;
 
     return [
       `User message:\n${message}`,
       `Relevant memories:\n${JSON.stringify(memories, null, 2)}`,
-      `Goals:\n${JSON.stringify(goals, null, 2)}`,
-      `Emotional context:\n${JSON.stringify(emotions, null, 2)}`,
+      `ACE operating context:\n${JSON.stringify(
+        { goal, intent, priority, risk, plan, execution, emotion },
+        null,
+        2,
+      )}`,
       `Instructions:\n${promptTemplates.instructions.map((instruction) => `- ${instruction}`).join("\n")}`,
     ].join("\n\n");
   }

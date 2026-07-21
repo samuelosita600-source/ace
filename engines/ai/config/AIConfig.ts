@@ -13,7 +13,7 @@ export const AIConfig = {
                                                                                   /**
                                                                                            * Default model used by ACE.
                                                                                                     */
-                                                                                                            defaultModel: "deepseek/deepseek-chat-v3-0324:free",
+                                                                                                            defaultModel: "openai/gpt-oss-20b:free",
 
                                                                                                                     /**
                                                                                                                              * Request timeout (milliseconds)
@@ -43,5 +43,4 @@ export const AIConfig = {
                                                                                                                                                                                                                                maxConcurrentRequests: 5,
                                                                                                                                                                                                                                };
 
-                                                                                                                                                                                                                               export default AIConfig;
-                                                                                                                                                                                                                 
+export default AIConfig;

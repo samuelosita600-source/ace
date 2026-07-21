@@ -3,47 +3,47 @@ export const ModelConfig = {
       /**
            * Default model used for normal conversations.
                 */
-                    primary: "deepseek/deepseek-chat-v3-0324:free",
+                    primary: "openai/gpt-oss-20b:free",
 
                         /**
                              * Best model for coding.
                                   */
-                                      coding: "deepseek/deepseek-chat-v3-0324:free",
+                                      coding: "openai/gpt-oss-20b:free",
 
                                           /**
                                                * Best model for reasoning.
                                                     */
-                                                        reasoning: "deepseek/deepseek-chat-v3-0324:free",
+                                                        reasoning: "openai/gpt-oss-20b:free",
 
                                                             /**
                                                                  * Best model for planning and strategy.
                                                                       */
-                                                                          planning: "deepseek/deepseek-chat-v3-0324:free",
+                                                                          planning: "openai/gpt-oss-20b:free",
 
                                                                               /**
                                                                                    * Best model for creative writing.
                                                                                         */
-                                                                                            writing: "deepseek/deepseek-chat-v3-0324:free",
+                                                                                            writing: "openai/gpt-oss-20b:free",
 
                                                                                                 /**
                                                                                                      * Best model for summarization.
                                                                                                           */
-                                                                                                              summarization: "deepseek/deepseek-chat-v3-0324:free",
+                                                                                                      summarization: "openai/gpt-oss-20b:free",
 
                                                                                                                   /**
                                                                                                                        * Best model for translation.
                                                                                                                             */
-                                                                                                                                translation: "deepseek/deepseek-chat-v3-0324:free",
+                                                                                                                                translation: "openai/gpt-oss-20b:free",
 
                                                                                                                                     /**
                                                                                                                                          * Best model for mathematical tasks.
                                                                                                                                               */
-                                                                                                                                                  mathematics: "deepseek/deepseek-chat-v3-0324:free",
+                                                                                                                                                  mathematics: "openai/gpt-oss-20b:free",
 
                                                                                                                                                       /**
                                                                                                                                                            * Emergency fallback model.
                                                                                                                                                                 */
-                                                                                                                                                                    fallback: "deepseek/deepseek-chat-v3-0324:free",
+                                                                                                                                                                    fallback: "openai/gpt-oss-20b:free",
 
                                                                                                                                                                     };
 

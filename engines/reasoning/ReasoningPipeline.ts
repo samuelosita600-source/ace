@@ -1,41 +1,40 @@
-import {
-      ReasoningContext,
-        ReasoningResult,
-        } from "./ReasoningTypes";
+import emotionEngine from "@/engines/emotion/EmotionEngine";
+import goalService from "@/engines/goal";
+import intentService from "@/engines/intent";
+import planningService from "@/engines/planning";
+import priorityService from "@/engines/priority";
+import riskService from "@/engines/risk";
+import executionService from "@/engines/execution";
+import type { ReasoningContext, ReasoningResult } from "./ReasoningTypes";
+import reasoningExecutor from "./ReasoningExecutor";
 
-        import reasoningExecutor from "./ReasoningExecutor";
+export class ReasoningPipeline {
+  /** Executes ACE's deterministic reasoning stages before model reasoning. */
+  public async execute(context: ReasoningContext): Promise<ReasoningResult> {
+    try {
+      const classifiedContext = riskService.execute(
+        priorityService.execute(
+          intentService.execute(goalService.execute(context)),
+        ),
+      );
+      const plannedContext = planningService.execute(classifiedContext);
+      const executableContext = executionService.execute(plannedContext);
+      const emotion = await emotionEngine.analyze(executableContext.message);
 
-        export class ReasoningPipeline {
-          /**
-             * Executes the complete reasoning pipeline.
-                */
-                  public async execute(
-                      context: ReasoningContext
-                        ): Promise<ReasoningResult> {
-                            try {
-                                  const result = await reasoningExecutor.execute(context);
+      return reasoningExecutor.execute({ ...executableContext, emotion });
+    } catch (error) {
+      console.error("[ReasoningPipeline]", error);
+      throw error;
+    }
+  }
 
-                                        return result;
-                                            } catch (error) {
-                                                  console.error("[ReasoningPipeline]", error);
+  /** Checks whether the deterministic reasoning pipeline is available. */
+  public async isReady(): Promise<boolean> {
+    return true;
+  }
+}
 
-                                                        throw error;
-                                                            }
-                                                              }
+const reasoningPipeline = new ReasoningPipeline();
 
-                                                                /**
-                                                                   * Checks whether the reasoning pipeline is available.
-                                                                      */
-                                                                        public async isReady(): Promise<boolean> {
-                                                                            try {
-                                                                                  return true;
-                                                                                      } catch {
-                                                                                            return false;
-                                                                                                }
-                                                                                                  }
-                                                                                                  }
-
-                                                                                                  const reasoningPipeline = new ReasoningPipeline();
-
-                                                                                                  export default reasoningPipeline;
+export default reasoningPipeline;
                                                                                               
