@@ -121,10 +121,37 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    @apply font-sans scroll-smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+    background:
+      radial-gradient(circle at top, rgba(34, 211, 238, 0.12), transparent 28%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 35%),
+      var(--background);
+    background-attachment: fixed;
   }
-  html {
-    @apply font-sans;
+
+  ::selection {
+    background: rgba(103, 232, 249, 0.25);
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.4);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background: rgba(103, 232, 249, 0.3);
+    border: 2px solid rgba(2, 6, 23, 0.8);
   }
 }
